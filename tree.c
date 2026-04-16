@@ -18,6 +18,8 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+extern int object_write(ObjectType type,const void *data,size_t len,ObjectID *id_out);
+
 // ─── Mode Constants ─────────────────────────────────────────────────────────
 
 #define MODE_FILE      0100644
@@ -185,8 +187,14 @@ static int build_tree_level(TempEntry *entries, int count, const char *prefix, O
             continue;
 
         char new_prefix[256];
-        snprintf(new_prefix, sizeof(new_prefix),
-                "%s%s/", prefix ? prefix : "", dirname);
+    if (snprintf(new_prefix,
+                sizeof(new_prefix),
+                "%s%s/",
+                prefix ? prefix : "",
+                dirname) >= (int)sizeof(new_prefix)) {
+        return -1;
+    }
+new_prefix[sizeof(new_prefix) - 1] = '\0';
 
         ObjectID sub_id;
 
