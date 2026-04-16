@@ -10,30 +10,30 @@
 ## Phase 1 — Object Storage
 
 ### Screenshot 1A
-![](report/1A.png)
+![](1A.png)
 
 ### Screenshot 1B
-![](report/1B.png)
+![](1B.png)
 
 ---
 
 ## Phase 2 — Tree Objects
 
 ### Screenshot 2A
-![](report/2A.png)
+![](2A.png)
 
 ### Screenshot 2B
-![](report/2B.png)
+![](2B.png)
 
 ---
 
 ## Phase 3 — Index / Staging Area
 
 ### Screenshot 3A
-![](report/3A.png)
+![](3A.png)
 
 ### Screenshot 3B
-![](report/3B.png)
+![](3B.png)
 
 ---
 
@@ -59,10 +59,10 @@
 ## Final Test
 
 ### Integration Test Output
-![](report/final1.png)
+![](final1.png)
 
 ### Additional Final Evidence
-![](report/final2.png)
+![](final2.png)
 
 ---
 
