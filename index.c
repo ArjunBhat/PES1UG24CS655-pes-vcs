@@ -282,9 +282,27 @@ int index_add(Index *index, const char *path)
         mode = 0100755;
     else
         mode = 0100644;
-    (void)index;
-    (void)mode;
-    (void)hash;
-    (void)size;
+
+    IndexEntry *existing = index_find(index, path);
+
+    if (existing)
+    {
+        existing->mode = mode;
+        existing->hash = hash;
+        existing->mtime_sec = st.st_mtime;
+        existing->size = size;
+    }
+    else
+    {
+        IndexEntry *e = &index->entries[index->count++];
+
+        e->mode = mode;
+        e->hash = hash;
+        e->mtime_sec = st.st_mtime;
+        e->size = size;
+
+        strcpy(e->path, path);
+    }
+
     return 0;
 }
