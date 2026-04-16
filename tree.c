@@ -201,6 +201,19 @@ static int build_tree_level(TempEntry *entries, int count, const char *prefix, O
         strcpy(t->name, dirname);
         t->hash = sub_id;
     }
+    void *data;
+    size_t len;
+
+    if (tree_serialize(&tree, &data, &len) != 0)
+        return -1;
+
+    if (object_write(OBJ_TREE, data, len, id_out) != 0) {
+        free(data);
+        return -1;
+    }
+
+    free(data);
+    return 0;
 }
 
 int tree_from_index(ObjectID *id_out) {
@@ -228,4 +241,5 @@ int tree_from_index(ObjectID *id_out) {
     }
 
     fclose(fp);
+    return build_tree_level(entries, count, NULL, id_out);
 }
