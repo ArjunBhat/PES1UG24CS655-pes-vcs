@@ -139,5 +139,10 @@ int tree_from_index(ObjectID *id_out) {
     tree.count = 0;
     for (int i = 0; i < index.count; i++) {
        IndexEntry *entry = &index.entries[i];
+       TreeEntry *tentry = &tree.entries[tree.count++];
+       
+        tentry->mode = entry->mode;
+        strcpy(tentry->name, entry->path);
+        tentry->hash = entry->hash;
     }
 }
