@@ -17,4 +17,9 @@ test_tree
 .vscode/
 .idea/
 
-
+file1.txt
+file2.txt
+run_tree
+run_tree.c
+src/
+t-integration
