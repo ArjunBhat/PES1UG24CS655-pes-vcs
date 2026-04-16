@@ -137,6 +137,12 @@ typedef struct {
     char path[256];
 } TempEntry;
 
+static int build_tree_level(TempEntry *entries, int count, const char *prefix, ObjectID *id_out)
+{
+    Tree tree;
+    tree.count = 0;                                
+}
+
 int tree_from_index(ObjectID *id_out) {
     FILE *fp = fopen(".pes/index", "r");
     if (!fp) return -1;
