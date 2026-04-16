@@ -140,9 +140,22 @@ int tree_from_index(ObjectID *id_out) {
     for (int i = 0; i < index.count; i++) {
        IndexEntry *entry = &index.entries[i];
        TreeEntry *tentry = &tree.entries[tree.count++];
-       
+
         tentry->mode = entry->mode;
         strcpy(tentry->name, entry->path);
         tentry->hash = entry->hash;
     }
+    void *data;
+    size_t len;
+
+    if (tree_serialize(&tree, &data, &len) != 0)
+        return -1;
+
+    if (object_write(OBJ_TREE, data, len, id_out) != 0) {
+        free(data);
+        return -1;
+    }
+
+    free(data);
+    return 0;
 }
