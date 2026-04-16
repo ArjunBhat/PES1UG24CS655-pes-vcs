@@ -24,6 +24,8 @@
 #include <unistd.h>
 #include <dirent.h>
 
+extern int object_write(ObjectType type,const void *data,size_t len,ObjectID *id_out);
+
 // ─── PROVIDED ────────────────────────────────────────────────────────────────
 
 // Find an index entry by path (linear scan).
@@ -241,6 +243,39 @@ int index_add(Index *index, const char *path)
 
     uint32_t mode;
 
+    FILE *fp = fopen(path, "rb");
+    if (!fp)
+        return -1;
+
+    fseek(fp, 0, SEEK_END);
+    size_t size = ftell(fp);
+    rewind(fp);
+
+    void *data = malloc(size);
+    if (!data)
+    {
+        fclose(fp);
+        return -1;
+    }
+
+    if (fread(data, 1, size, fp) != size)
+    {
+        free(data);
+        fclose(fp);
+        return -1;
+    }
+    fclose(fp);
+
+    ObjectID hash;
+
+    if (object_write(OBJ_BLOB, data, size, &hash) != 0)
+    {
+        free(data);
+        return -1;
+    }
+
+    free(data);
+
     if (S_ISDIR(st.st_mode))
         mode = 040000;
     else if (st.st_mode & S_IXUSR)
@@ -249,5 +284,7 @@ int index_add(Index *index, const char *path)
         mode = 0100644;
     (void)index;
     (void)mode;
+    (void)hash;
+    (void)size;
     return 0;
 }
