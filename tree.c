@@ -131,7 +131,35 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 //   - object_write    : save that binary buffer to the store as OBJ_TREE
 //
 // Returns 0 on success, -1 on error.
+typedef struct {
+    uint32_t mode;
+    ObjectID hash;
+    char path[256];
+} TempEntry;
+
 int tree_from_index(ObjectID *id_out) {
-    (void)id_out;
-    return 0;
+    FILE *fp = fopen(".pes/index", "r");
+    if (!fp) return -1;
+
+    TempEntry entries[256];
+    int count = 0;
+
+    while (!feof(fp)) {
+        char hash_hex[HASH_HEX_SIZE + 1];
+        long mtime;
+        size_t size;
+
+        if (fscanf(fp, "%o %64s %ld %zu %255s\n",
+                &entries[count].mode,
+                hash_hex,
+                &mtime,
+                &size,
+                entries[count].path) == 5) {
+
+            hex_to_hash(hash_hex, &entries[count].hash);
+            count++;
+        }
+    }
+
+    fclose(fp);
 }
