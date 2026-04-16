@@ -140,7 +140,25 @@ typedef struct {
 static int build_tree_level(TempEntry *entries, int count, const char *prefix, ObjectID *id_out)
 {
     Tree tree;
-    tree.count = 0;                                
+    tree.count = 0;
+    for (int i = 0; i < count; i++) {
+
+        const char *rel = entries[i].path;
+
+        if (prefix && strncmp(rel, prefix, strlen(prefix)) != 0)
+            continue;
+
+        const char *name = prefix ? rel + strlen(prefix) : rel;
+
+        if (strchr(name, '/') != NULL)
+            continue;
+
+        TreeEntry *t = &tree.entries[tree.count++];
+
+        t->mode = entries[i].mode;
+        strcpy(t->name, name);
+        t->hash = entries[i].hash;
+    }
 }
 
 int tree_from_index(ObjectID *id_out) {
