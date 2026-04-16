@@ -30,10 +30,10 @@
 ## Phase 3 — Index / Staging Area
 
 ### Screenshot 3A
-![](3A.png)
+![](screenshots/3A.png)
 
 ### Screenshot 3B
-![](3B.png)
+![](screenshots/3B.png)
 
 ---
 
