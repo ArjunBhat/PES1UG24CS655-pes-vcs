@@ -159,6 +159,48 @@ static int build_tree_level(TempEntry *entries, int count, const char *prefix, O
         strcpy(t->name, name);
         t->hash = entries[i].hash;
     }
+    for (int i = 0; i < count; i++) {
+
+        const char *rel = entries[i].path;
+
+        if (prefix && strncmp(rel, prefix, strlen(prefix)) != 0)
+            continue;
+
+        const char *name = prefix ? rel + strlen(prefix) : rel;
+
+        char *slash = strchr(name, '/');
+        if (!slash)
+            continue;
+
+        char dirname[256];
+        strncpy(dirname, name, slash - name);
+        dirname[slash - name] = '\0';
+
+        int exists = 0;
+        for (int j = 0; j < tree.count; j++)
+            if (strcmp(tree.entries[j].name, dirname) == 0)
+                exists = 1;
+
+        if (exists)
+            continue;
+
+        char new_prefix[256];
+        snprintf(new_prefix, sizeof(new_prefix),
+                "%s%s/", prefix ? prefix : "", dirname);
+
+        ObjectID sub_id;
+
+        if (build_tree_level(entries, count,
+                            new_prefix,
+                            &sub_id) != 0)
+            return -1;
+
+        TreeEntry *t = &tree.entries[tree.count++];
+
+        t->mode = MODE_DIR;
+        strcpy(t->name, dirname);
+        t->hash = sub_id;
+    }
 }
 
 int tree_from_index(ObjectID *id_out) {
