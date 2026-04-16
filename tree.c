@@ -137,4 +137,7 @@ int tree_from_index(ObjectID *id_out) {
         return -1;
     Tree tree;
     tree.count = 0;
+    for (int i = 0; i < index.count; i++) {
+       IndexEntry *entry = &index.entries[i];
+    }
 }
