@@ -42,17 +42,17 @@
 ### Screenshot 4A
 `./pes log` showing three commits.
 
-![](report/4A.png)
+![](4A.png)
 
 ### Screenshot 4B
 `find .pes -type f | sort` showing object store growth after three commits.
 
-![](report/4B.png)
+![](4B.png)
 
 ### Screenshot 4C
 `cat .pes/refs/heads/main` and `cat .pes/HEAD` showing the reference chain.
 
-![](report/4C.png)
+![](4C.png)
 
 ---
 
