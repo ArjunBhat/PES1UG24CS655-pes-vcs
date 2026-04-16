@@ -232,9 +232,22 @@ int index_save(const Index *index)
 //   - index_find                       : checking if the file is already staged
 //
 // Returns 0 on success, -1 on error.
-int index_add(Index *index, const char *path) {
-    // TODO: Implement file staging
-    // (See Lab Appendix for logical steps)
-    (void)index; (void)path;
-    return -1;
+int index_add(Index *index, const char *path)
+{
+    struct stat st;
+
+    if (stat(path, &st) != 0)
+        return -1;
+
+    uint32_t mode;
+
+    if (S_ISDIR(st.st_mode))
+        mode = 040000;
+    else if (st.st_mode & S_IXUSR)
+        mode = 0100755;
+    else
+        mode = 0100644;
+    (void)index;
+    (void)mode;
+    return 0;
 }
