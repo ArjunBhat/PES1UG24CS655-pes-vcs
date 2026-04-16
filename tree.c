@@ -135,4 +135,6 @@ int tree_from_index(ObjectID *id_out) {
     Index index;
     if (index_load(&index) != 0)
         return -1;
+    Tree tree;
+    tree.count = 0;
 }
